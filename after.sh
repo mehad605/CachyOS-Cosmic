@@ -91,6 +91,27 @@ else
 fi
 
 # ============================================================
+section "Cloning and adopting Dotfiles"
+# ============================================================
+if [ ! -d "$HOME/Dotfiles/.git" ]; then
+    echo "Cloning Dotfiles repository..."
+    git clone https://github.com/mehad605/Dotfiles "$HOME/Dotfiles" && ok "Dotfiles cloned" || { warn "Dotfiles clone failed"; ERRORS=$((ERRORS + 1)); }
+else
+    echo "Dotfiles already cloned — pulling latest..."
+    git -C "$HOME/Dotfiles" pull && ok "Dotfiles updated" || warn "Dotfiles pull failed"
+fi
+
+if [ -d "$HOME/Dotfiles" ]; then
+    pushd "$HOME/Dotfiles" > /dev/null
+    stow . --adopt && ok "stow --adopt completed" || warn "stow --adopt failed"
+    git reset --hard && ok "git reset --hard completed (Dotfiles content restored)" || warn "git reset --hard failed"
+
+    systemctl --user enable --now cosmic-wallpaper-portal.service && ok "cosmic-wallpaper-portal service enabled" || warn "Could not enable cosmic-wallpaper-portal"
+    systemctl --user restart xdg-desktop-portal && ok "xdg-desktop-portal restarted" || warn "Could not restart xdg-desktop-portal"
+    popd > /dev/null
+fi
+
+# ============================================================
 section "Ensuring syncthing user service is running"
 # ============================================================
 systemctl --user enable --now syncthing.service && ok "syncthing service running" || warn "Could not enable syncthing"
