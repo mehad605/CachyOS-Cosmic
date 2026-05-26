@@ -471,6 +471,12 @@ else
     ok "zsh is already the default shell"
 fi
 
+#git username and email
+git config --global user.name "mehad605"
+
+git config --global user.email "mehad605@gmail.com"
+
+
 #enable thermadd
 sudo systemctl enable --now thermald
 # Disable Turbo
