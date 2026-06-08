@@ -155,7 +155,10 @@ sudo pacman -S --noconfirm --needed \
     thermald \
     github-cli \
     go \
+    rclone \
     lsp-plugins \
+    pwvucontrol \
+    cosmic-store \
     easyeffects
 ok "pacman packages done"
 
@@ -172,6 +175,11 @@ echo "Installing AUR packages..."
 paru -S --needed \
     visual-studio-code-bin \
     icu69-bin \
+    bangla-typer-bin \
+    ludusavi-bin \
+    fsearch \
+    motrix-bin \
+    rpcs3-bin \
     antigravity \
     android-studio \
     claude-code-stable \
@@ -481,6 +489,11 @@ git config --global user.email "mehad605@gmail.com"
 sudo systemctl enable --now thermald
 # Disable Turbo
 echo "1" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
+
+
+#install antigravity-cli
+curl -fsSL https://antigravity.google/cli/install.sh | bash
+
 # ============================================================
 section "Summary"
 # ============================================================

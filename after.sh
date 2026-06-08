@@ -83,9 +83,6 @@ section "Global npm packages"
 if command -v npm &>/dev/null; then
     echo "Installing @openai/codex..."
     npm install -g @openai/codex 2>&1 && ok "@openai/codex installed" || warn "@openai/codex install failed"
-
-    echo "Installing @google/gemini-cli..."
-    npm install -g @google/gemini-cli 2>&1 && ok "@google/gemini-cli installed" || warn "@google/gemini-cli install failed"
 else
     warn "npm not available — skipping global packages"
 fi
@@ -114,7 +111,11 @@ fi
 # ============================================================
 section "Ensuring syncthing user service is running"
 # ============================================================
-systemctl --user enable --now syncthing.service && ok "syncthing service running" || warn "Could not enable syncthing"
+systemctl --user enable --now syncthing.service && echo "syncthing service running" || echo "Could not enable syncthing"
+
+systemctl --user daemon-reload
+systemctl --user enable --now localsearch-3.service
+systemctl --user status localsearch-3.service
 
 # ============================================================
 section "Summary"
