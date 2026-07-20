@@ -71,11 +71,16 @@ echo "Installing/upgrading the following packages..."
 echo "(already-installed up-to-date packages will be skipped)"
 sudo pacman -S --noconfirm --needed \
     proton-vpn-gtk-app \
+    ncdu \
+    gtk-layer-shell \
+    ydotool \
     brave-bin \
+    openblas \
     zen-browser-bin \
     asusctl \
     syncthing \
     zathura \
+    powertop \
     opencode \
     android-tools \
     scrcpy \
@@ -174,6 +179,7 @@ fi
 echo "Installing AUR packages..."
 paru -S --needed \
     visual-studio-code-bin \
+    cachyos-downgrade-git \
     icu69-bin \
     bangla-typer-bin \
     ludusavi-bin \
@@ -493,6 +499,28 @@ echo "1" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
 
 #install antigravity-cli
 curl -fsSL https://antigravity.google/cli/install.sh | bash
+
+
+# Power stuff
+sudo tee /etc/systemd/system/powertop.service > /dev/null << 'EOF'
+[Unit]
+Description=Powertop tunings
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/powertop --auto-tune
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now powertop.service
+
+sudo usermod -aG input $USER
+systemctl --user enable --now ydotool.service
+
 
 # ============================================================
 section "Summary"
